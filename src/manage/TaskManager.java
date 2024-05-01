@@ -164,8 +164,7 @@ public class TaskManager {
             if(subtask != null) {
                 Epic epic = epicList.get(subtask.getEpicId()) ;
                 if (epic != null) {
-                    ArrayList<Integer> codes = epic.getSubtaskCodes();
-                    codes.remove((Integer) subtask.getId());
+                    epic.getSubtaskCodes().remove((Integer) subtask.getId());
                     subtaskList.remove(id);
                     refreshEpicStatus(epic);
                 }
@@ -233,9 +232,8 @@ public class TaskManager {
     private void refreshStatus(int epicId) {
         Epic epic = getEpicFromList(epicId);
         if (epic != null) {
-            ArrayList<TaskStatuses> statuses = getSubtaskStatusesList(epic);
-            TaskStatuses epicStatus = calculateEpicStatus(statuses);
-            updateEpic(new Epic(epic.getTitle(), epic.getDescription(), epic.getId(), epicStatus, epic.getSubtaskCodes()));
+            updateEpic(new Epic(epic.getTitle(), epic.getDescription(), epic.getId()
+                            , calculateEpicStatus(getSubtaskStatusesList(epic)), epic.getSubtaskCodes()));
         }
     }
 
