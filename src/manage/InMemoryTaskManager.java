@@ -188,11 +188,10 @@ public class InMemoryTaskManager implements TaskManager {
             int id = task.getId();
             if (id > 0 && taskList.containsKey(id)) {
                 taskList.put(task.getId(), task);
-                return task;
             }
         }
 
-        return null;
+        return task;
     }
 
     @Override
@@ -201,11 +200,10 @@ public class InMemoryTaskManager implements TaskManager {
             int id = epic.getId();
             if (id > 0 && epicList.containsKey(id)) {
                 epicList.put(epic.getId(), epic);
-                return epic;
             }
         }
 
-        return null;
+        return epic;
     }
 
     @Override
@@ -215,11 +213,10 @@ public class InMemoryTaskManager implements TaskManager {
             if (id > 0 && subtaskList.containsKey(id)) {
                 subtaskList.put(id, subtask);
                 refreshEpicStatusBySubtask(subtask);
-                return subtask;
             }
         }
 
-        return null;
+        return subtask;
     }
 
     @Override
