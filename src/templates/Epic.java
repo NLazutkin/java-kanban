@@ -20,7 +20,9 @@ public class Epic extends Task {
     }
 
     public void addSubtaskCode(int code) {
-        subtaskCodes.add(code);
+        if (code != getId()) {
+            subtaskCodes.add(code);
+        }
     }
 
     @Override
