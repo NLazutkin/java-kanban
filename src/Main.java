@@ -8,41 +8,41 @@ public class Main {
     public static void main(String[] args) {
         TaskManager taskManager = Managers.getDefault();
 
-        Task task_1 = taskManager.createTask(new Task("Задача 1", "Задача 1"));
-        Task task_2 = taskManager.createTask(new Task("Задача 2", "Задача 2"));
-        Task task_3 = taskManager.createTask(new Task("Задача 3", "Задача 3"));
-        Epic epic_1 = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
-        Epic epic_2 = taskManager.createEpic(new Epic("Эпик 2", "Эпик 2"));
-        Subtask subtask_1 = taskManager.createSubtask(new Subtask("Сабтаск 1", "Эпик 1"));
-        Subtask subtask_2 = taskManager.createSubtask(new Subtask("Сабтаск 2", "Эпик 1"));
-        Subtask subtask_3 = taskManager.createSubtask(new Subtask("Сабтаск 3", "Эпик 1"));
-        Subtask subtask_4 = taskManager.createSubtask(new Subtask("Сабтаск 4", "Эпик 1"));
-        Subtask subtask_5 = taskManager.createSubtask(new Subtask("Сабтаск 5", "Эпик 2"));
-        Subtask subtask_6 = taskManager.createSubtask(new Subtask("Сабтаск 6", "Эпик 2"));
-        Subtask subtask_7 = taskManager.createSubtask(new Subtask("Сабтаск 7", "Эпик 2"));
-        Subtask subtask_8 = taskManager.createSubtask(new Subtask("Сабтаск 8", "Эпик 2"));
-        taskManager.createRelation(epic_1, subtask_1);
-        taskManager.createRelation(epic_1, subtask_2);
-        taskManager.createRelation(epic_1, subtask_3);
-        taskManager.createRelation(epic_1, subtask_4);
-        taskManager.createRelation(epic_2, subtask_5);
-        taskManager.createRelation(epic_2, subtask_6);
-        taskManager.createRelation(epic_2, subtask_7);
-        taskManager.createRelation(epic_2, subtask_8);
+        Task task1 = taskManager.createTask(new Task("Задача 1", "Задача 1"));
+        Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2"));
+        Task task3 = taskManager.createTask(new Task("Задача 3", "Задача 3"));
+        Epic epic1 = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
+        Epic epic2 = taskManager.createEpic(new Epic("Эпик 2", "Эпик 2"));
+        Subtask subtask1 = taskManager.createSubtask(new Subtask("Сабтаск 1", "Эпик 1"));
+        Subtask subtask2 = taskManager.createSubtask(new Subtask("Сабтаск 2", "Эпик 1"));
+        Subtask subtask3 = taskManager.createSubtask(new Subtask("Сабтаск 3", "Эпик 1"));
+        Subtask subtask4 = taskManager.createSubtask(new Subtask("Сабтаск 4", "Эпик 1"));
+        Subtask subtask5 = taskManager.createSubtask(new Subtask("Сабтаск 5", "Эпик 2"));
+        Subtask subtask6 = taskManager.createSubtask(new Subtask("Сабтаск 6", "Эпик 2"));
+        Subtask subtask7 = taskManager.createSubtask(new Subtask("Сабтаск 7", "Эпик 2"));
+        Subtask subtask8 = taskManager.createSubtask(new Subtask("Сабтаск 8", "Эпик 2"));
+        taskManager.createRelation(epic1, subtask1);
+        taskManager.createRelation(epic1, subtask2);
+        taskManager.createRelation(epic1, subtask3);
+        taskManager.createRelation(epic1, subtask4);
+        taskManager.createRelation(epic2, subtask5);
+        taskManager.createRelation(epic2, subtask6);
+        taskManager.createRelation(epic2, subtask7);
+        taskManager.createRelation(epic2, subtask8);
 
-        task_1 = taskManager.getTaskFromList(task_1.getId());
-        task_2 = taskManager.getTaskFromList(task_2.getId());
-        task_3 = taskManager.getTaskFromList(task_3.getId());
-        epic_1 = taskManager.getEpicFromList(epic_1.getId());
-        epic_2 = taskManager.getEpicFromList(epic_2.getId());
-        subtask_1 = taskManager.getSubtaskFromList(subtask_1.getId());
-        subtask_2 = taskManager.getSubtaskFromList(subtask_2.getId());
-        subtask_3 = taskManager.getSubtaskFromList(subtask_3.getId());
-        subtask_4 = taskManager.getSubtaskFromList(subtask_4.getId());
-        subtask_5 = taskManager.getSubtaskFromList(subtask_5.getId());
-        subtask_6 = taskManager.getSubtaskFromList(subtask_6.getId());
-        subtask_7 = taskManager.getSubtaskFromList(subtask_7.getId());
-        subtask_8 = taskManager.getSubtaskFromList(subtask_8.getId());
+        task1 = taskManager.getTaskFromList(task1.getId());
+        task2 = taskManager.getTaskFromList(task2.getId());
+        task3 = taskManager.getTaskFromList(task3.getId());
+        epic1 = taskManager.getEpicFromList(epic1.getId());
+        epic2 = taskManager.getEpicFromList(epic2.getId());
+        subtask1 = taskManager.getSubtaskFromList(subtask1.getId());
+        subtask2 = taskManager.getSubtaskFromList(subtask2.getId());
+        subtask3 = taskManager.getSubtaskFromList(subtask3.getId());
+        subtask4 = taskManager.getSubtaskFromList(subtask4.getId());
+        subtask5 = taskManager.getSubtaskFromList(subtask5.getId());
+        subtask6 = taskManager.getSubtaskFromList(subtask6.getId());
+        subtask7 = taskManager.getSubtaskFromList(subtask7.getId());
+        subtask8 = taskManager.getSubtaskFromList(subtask8.getId());
 
         // show all
         System.out.println(" ");
@@ -74,12 +74,12 @@ public class Main {
         }
 
         // user scenario
-        subtask_2 = taskManager.getSubtaskFromList(subtask_2.getId());
-        task_1 = taskManager.getTaskFromList(task_1.getId());
-        epic_2 = taskManager.getEpicFromList(epic_2.getId());
-        task_2 = taskManager.getTaskFromList(task_2.getId());
-        subtask_1 = taskManager.getSubtaskFromList(subtask_1.getId());
-        epic_1 = taskManager.getEpicFromList(epic_1.getId());
+        subtask2 = taskManager.getSubtaskFromList(subtask2.getId());
+        task1 = taskManager.getTaskFromList(task1.getId());
+        epic2 = taskManager.getEpicFromList(epic2.getId());
+        task2 = taskManager.getTaskFromList(task2.getId());
+        subtask1 = taskManager.getSubtaskFromList(subtask1.getId());
+        epic1 = taskManager.getEpicFromList(epic1.getId());
 
         System.out.println(" ");
         System.out.println("История польз.:");
@@ -87,18 +87,18 @@ public class Main {
             System.out.println(task);
         }
 
-        boolean result_task_2 = taskManager.deleteTask(task_2.getId());
+        boolean resulttask2 = taskManager.deleteTask(task2.getId());
         System.out.println(" ");
         System.out.println("История польз. удалена Задача 2:");
         for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }
 
-        boolean result_epic_1 = taskManager.deleteEpic(epic_1.getId());
-        boolean result_subtask_1 = taskManager.deleteSubtask(subtask_1.getId());
-        boolean result_subtask_2 = taskManager.deleteSubtask(subtask_2.getId());
-        boolean result_subtask_3 = taskManager.deleteSubtask(subtask_3.getId());
-        boolean result_subtask_4 = taskManager.deleteSubtask(subtask_4.getId());
+        boolean resultepic1 = taskManager.deleteEpic(epic1.getId());
+        boolean resultsubtask1 = taskManager.deleteSubtask(subtask1.getId());
+        boolean resultsubtask2 = taskManager.deleteSubtask(subtask2.getId());
+        boolean resultsubtask3 = taskManager.deleteSubtask(subtask3.getId());
+        boolean resultsubtask4 = taskManager.deleteSubtask(subtask4.getId());
         System.out.println(" ");
         System.out.println("История польз. удален Эпик1 и все его подзадачи:");
         for (Task task : taskManager.getHistory()) {
