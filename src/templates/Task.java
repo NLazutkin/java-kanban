@@ -4,7 +4,7 @@ import enums.TaskStatuses;
 import java.util.Objects;
 
 public class Task {
-    private int id ;
+    private int id;
     private final String title;
     private final String description;
     private TaskStatuses status = TaskStatuses.NEW;
