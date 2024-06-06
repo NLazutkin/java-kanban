@@ -29,7 +29,7 @@ public class Subtask extends Task {
         return "Subtask {"
                 + "title = '" + super.getTitle() + '\''
                 + ", description = '" + super.getDescription() + '\''
-                + ", id = " + super.getId()+ '\''
+                + ", id = " + super.getId() + '\''
                 + ", status = " + super.getStatus() + '\''
                 + ", epicID = " + epicId
                 + '}';

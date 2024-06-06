@@ -30,7 +30,7 @@ public class Epic extends Task {
         return "Epic {"
                 + "title = '" + super.getTitle() + '\''
                 + ", description = '" + super.getDescription() + '\''
-                + ", id = " + super.getId()+ '\''
+                + ", id = " + super.getId() + '\''
                 + ", status = " + super.getStatus() + '\''
                 + ", subtaskCodes = " + subtaskCodes
                 + '}';
