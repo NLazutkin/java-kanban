@@ -9,8 +9,6 @@ import templates.Epic;
 import templates.Subtask;
 import templates.Task;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTests {
@@ -32,7 +30,7 @@ class EpicTests {
         assertNotNull(epic, "Эпик не создан");
         assertEquals(epic, savedEpic, "Эпики не совпадают.");
 
-        final ArrayList<Epic> epics = taskManager.getEpics();
+        final var epics = taskManager.getEpics();
 
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
@@ -78,11 +76,11 @@ class EpicTests {
     void checkClearEpics() {
         taskManager.createRelation(epic, subtask);
 
-        final ArrayList<Epic> epics = taskManager.getEpics();
+        final var epics = taskManager.getEpics();
         assertNotNull(epics, "Эпики не возвращаются");
         assertEquals(1, epics.size(), "Список Эпиков перед удалением пуст");
 
-        final ArrayList<Subtask> subtasks = taskManager.getSubtasks();
+        final var subtasks = taskManager.getSubtasks();
         assertNotNull(subtasks, "Подзадачи не возвращаются");
         assertEquals(1, subtasks.size(), "Список Подзадач перед удалением пуст");
 

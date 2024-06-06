@@ -6,14 +6,16 @@ import templates.Subtask;
 import templates.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private static int idCounter;
-    private HashMap<Integer, Task> taskList = new HashMap<>();
-    private HashMap<Integer, Epic> epicList = new HashMap<>();
-    private HashMap<Integer, Subtask> subtaskList = new HashMap<>();
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private final Map<Integer, Task> taskList = new HashMap<>();
+    private final Map<Integer, Epic> epicList = new HashMap<>();
+    private final Map<Integer, Subtask> subtaskList = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public Task createTask(Task task) {
@@ -50,7 +52,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         if (!taskList.isEmpty()) {
             return new ArrayList<>(taskList.values());
         }
@@ -58,7 +60,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Epic> getEpics() {
+    public List<Epic> getEpics() {
         if (!epicList.isEmpty()) {
             return new ArrayList<>(epicList.values());
         }
@@ -66,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasks() {
+    public List<Subtask> getSubtasks() {
         if (!subtaskList.isEmpty()) {
             return new ArrayList<>(subtaskList.values());
         }
@@ -76,6 +78,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public boolean clearTasksList() {
         if (!taskList.isEmpty()) {
+            for(Integer id: taskList.keySet()) {
+                historyManager.removeFromHistoryList(id);
+            }
             taskList.clear();
             return true;
         }
@@ -88,7 +93,12 @@ public class InMemoryTaskManager implements TaskManager {
             for (Epic epic : epicList.values()) {
                 for (Integer code : epic.getSubtaskCodes()){
                     subtaskList.remove(code);
+                    historyManager.removeFromHistoryList(code);
                 }
+            }
+
+            for(Integer id: epicList.keySet()) {
+                historyManager.removeFromHistoryList(id);
             }
             epicList.clear();
             return true;
@@ -102,6 +112,10 @@ public class InMemoryTaskManager implements TaskManager {
             for (Epic epic : epicList.values()) {
                 epic.getSubtaskCodes().clear();
                 refreshEpicStatus(epic);
+            }
+
+            for(Integer id: subtaskList.keySet()) {
+                historyManager.removeFromHistoryList(id);
             }
             subtaskList.clear();
             return true;
@@ -146,6 +160,7 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean deleteTask(int id) {
         if (!taskList.isEmpty() && taskList.containsKey(id)) {
             taskList.remove(id);
+            historyManager.removeFromHistoryList(id);
             return true;
         }
         return false;
@@ -157,8 +172,10 @@ public class InMemoryTaskManager implements TaskManager {
             ArrayList<Integer> codes =  epicList.get(id).getSubtaskCodes();
             for (Integer code : codes) {
                 subtaskList.remove(code);
+                historyManager.removeFromHistoryList(code);
             }
             epicList.remove(id);
+            historyManager.removeFromHistoryList(id);
             return true;
         }
         return false;
@@ -173,6 +190,7 @@ public class InMemoryTaskManager implements TaskManager {
                 if (epic != null) {
                     epic.getSubtaskCodes().remove((Integer) subtask.getId());
                     subtaskList.remove(id);
+                    historyManager.removeFromHistoryList(id);
                     refreshEpicStatus(epic);
                 }
                 return true;
@@ -222,10 +240,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getSubtaskByEpicId(int epicId) {
-        ArrayList<Subtask> subtasksArrayList = new ArrayList<>();
+    public List<Subtask> getSubtaskByEpicId(int epicId) {
+        List<Subtask> subtasksArrayList = new ArrayList<>();
         if(!epicList.isEmpty() && epicList.containsKey(epicId)) {
-            ArrayList<Integer> subtaskCodes = epicList.get(epicId).getSubtaskCodes();
+            List<Integer> subtaskCodes = epicList.get(epicId).getSubtaskCodes();
             for (Integer code : subtaskCodes) {
                 subtasksArrayList.add(subtaskList.get(code));
             }
@@ -235,7 +253,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
@@ -257,9 +275,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private ArrayList<TaskStatuses> getSubtaskStatusesList(int id) {
-        ArrayList<Subtask> subtaskArrayList = getSubtaskByEpicId(id);
-        ArrayList<TaskStatuses> statuses = new ArrayList<>();
+    private List<TaskStatuses> getSubtaskStatusesList(int id) {
+        List<Subtask> subtaskArrayList = getSubtaskByEpicId(id);
+        List<TaskStatuses> statuses = new ArrayList<>();
         if (!subtaskArrayList.isEmpty()) {
             for (Subtask subtaskFromList : subtaskArrayList) {
                 statuses.add(subtaskFromList.getStatus());
@@ -268,7 +286,7 @@ public class InMemoryTaskManager implements TaskManager {
         return statuses;
     }
 
-    private TaskStatuses calculateEpicStatus(ArrayList<TaskStatuses> statuses) {
+    private TaskStatuses calculateEpicStatus(List<TaskStatuses> statuses) {
         TaskStatuses epicStatus = TaskStatuses.IN_PROGRESS;
         if (!statuses.isEmpty()) {
             if (!statuses.contains(TaskStatuses.DONE) && !statuses.contains(TaskStatuses.IN_PROGRESS)) {

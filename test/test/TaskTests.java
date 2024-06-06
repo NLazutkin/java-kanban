@@ -7,8 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Task;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTests {
@@ -28,7 +26,7 @@ public class TaskTests {
         assertNotNull(savedTask, "Задача не найдена");
         assertEquals(task, savedTask, "Задачи не совпадают");
 
-        final ArrayList<Task> tasks = taskManager.getTasks();
+        final var tasks = taskManager.getTasks();
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач");
@@ -47,7 +45,7 @@ public class TaskTests {
 
     @Test
     void checkClearTasks() {
-        final ArrayList<Task> tasks = taskManager.getTasks();
+        final var tasks = taskManager.getTasks();
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Список задач перед удалением пуст");
 

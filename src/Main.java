@@ -44,10 +44,14 @@ public class Main {
         subtask_7 = taskManager.getSubtaskFromList(subtask_7.getId());
         subtask_8 = taskManager.getSubtaskFromList(subtask_8.getId());
 
+        // show all
+        System.out.println(" ");
         System.out.println("Задачи:");
         for (Task task : taskManager.getTasks()) {
             System.out.println(task);
         }
+
+        System.out.println(" ");
         System.out.println("Эпики:");
         for (Task epic : taskManager.getEpics()) {
             System.out.println(epic);
@@ -56,12 +60,47 @@ public class Main {
                 System.out.println("--> " + task);
             }
         }
+
+        System.out.println(" ");
         System.out.println("Подзадачи:");
         for (Task subtask : taskManager.getSubtasks()) {
             System.out.println(subtask);
         }
 
+        System.out.println(" ");
         System.out.println("История:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        // user scenario
+        subtask_2 = taskManager.getSubtaskFromList(subtask_2.getId());
+        task_1 = taskManager.getTaskFromList(task_1.getId());
+        epic_2 = taskManager.getEpicFromList(epic_2.getId());
+        task_2 = taskManager.getTaskFromList(task_2.getId());
+        subtask_1 = taskManager.getSubtaskFromList(subtask_1.getId());
+        epic_1 = taskManager.getEpicFromList(epic_1.getId());
+
+        System.out.println(" ");
+        System.out.println("История польз.:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        boolean result_task_2 = taskManager.deleteTask(task_2.getId());
+        System.out.println(" ");
+        System.out.println("История польз. удалена Задача 2:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        boolean result_epic_1 = taskManager.deleteEpic(epic_1.getId());
+        boolean result_subtask_1 = taskManager.deleteSubtask(subtask_1.getId());
+        boolean result_subtask_2 = taskManager.deleteSubtask(subtask_2.getId());
+        boolean result_subtask_3 = taskManager.deleteSubtask(subtask_3.getId());
+        boolean result_subtask_4 = taskManager.deleteSubtask(subtask_4.getId());
+        System.out.println(" ");
+        System.out.println("История польз. удален Эпик1 и все его подзадачи:");
         for (Task task : taskManager.getHistory()) {
             System.out.println(task);
         }

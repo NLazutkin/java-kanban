@@ -4,7 +4,7 @@ import templates.Epic;
 import templates.Subtask;
 import templates.Task;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
     Task createTask(Task task);
@@ -15,11 +15,11 @@ public interface TaskManager {
 
     void createRelation(Epic epic, Subtask subtask);
 
-    ArrayList<Task> getTasks();
+    List<Task> getTasks();
 
-    ArrayList<Epic> getEpics();
+    List<Epic> getEpics();
 
-    ArrayList<Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     boolean clearTasksList();
 
@@ -45,7 +45,7 @@ public interface TaskManager {
 
     Subtask updateSubtask(Subtask subtask);
 
-    ArrayList<Subtask> getSubtaskByEpicId(int id);
+    List<Subtask> getSubtaskByEpicId(int id);
 
-    ArrayList<Task> getHistory();
+    List<Task> getHistory();
 }
