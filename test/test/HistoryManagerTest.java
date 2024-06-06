@@ -6,9 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Task;
-
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -26,7 +24,7 @@ public class HistoryManagerTest {
         Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
         assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
-                +" не пуста перед запуском!");
+                + " не пуста перед запуском!");
 
         final Task savedTask_1 = taskManager.getTaskFromList(task.getId());
         assertEquals(1, taskManager.getHistory().size(), "В истории задач не 1 запись");
@@ -75,8 +73,8 @@ public class HistoryManagerTest {
 
         taskManager.deleteTask(savedTask_2.getId());
 
-        assertNotEquals(savedTask_2, taskManager.getTaskFromList(savedTask_2.getId())
-                                    , "Элемент не удален из списка!");
+        assertNotEquals(savedTask_2, taskManager.getTaskFromList(savedTask_2.getId()),
+                "Элемент не удален из списка!");
 
         List<Task> taskList_new = taskManager.getHistory();
         Task middleTask_new = taskList_new.get(1);

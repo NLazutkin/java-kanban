@@ -15,7 +15,7 @@ public class Subtask extends Task {
     }
 
     public void setEpicId(int epicId) {
-        if(epicId != getId()) {
+        if (epicId != getId()) {
             this.epicId = epicId;
         }
     }
@@ -26,12 +26,12 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "Subtask {" +
-                "title='" + super.getTitle() + '\'' +
-                ", description='" + super.getDescription() + '\'' +
-                ", id=" + super.getId()+ '\'' +
-                ", status=" + super.getStatus() + '\'' +
-                ", epicID=" + epicId +
-                '}';
+        return "Subtask {"
+                + "title = '" + super.getTitle() + '\''
+                + ", description = '" + super.getDescription() + '\''
+                + ", id = " + super.getId()+ '\''
+                + ", status = " + super.getStatus() + '\''
+                + ", epicID = " + epicId
+                + '}';
     }
 }

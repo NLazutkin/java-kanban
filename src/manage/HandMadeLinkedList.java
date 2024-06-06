@@ -1,7 +1,6 @@
 package manage;
 
 import templates.Task;
-
 import java.util.*;
 
 public class HandMadeLinkedList {

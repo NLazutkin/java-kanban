@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTests {
@@ -97,11 +96,11 @@ class EpicTests {
         assertEquals(epic, savedEpic, "Эпики не совпадают");
 
         assertNotNull(taskManager.updateEpic(new Epic("Эпик 1.1",
-                                                 "Эпик 1.1",
-                                                            epic.getId(),
-                                                            TaskStatuses.IN_PROGRESS,
-                                                            epic.getSubtaskCodes()))
-                        , "Ошибка обновления Эпика");
+                                                    "Эпик 1.1",
+                                                    epic.getId(),
+                                                    TaskStatuses.IN_PROGRESS,
+                                                    epic.getSubtaskCodes())),
+                    "Ошибка обновления Эпика");
 
         final Task updatedEpic = taskManager.getEpicFromList(savedEpic.getId());
 

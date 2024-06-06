@@ -1,7 +1,6 @@
 package manage;
 
 import templates.Task;
-
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -16,6 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void addInHistoryList(Task task) {
         historyList.add(task);
     }
+
     @Override
     public void removeFromHistoryList(int id) {
         historyList.remove(id);

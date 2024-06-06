@@ -27,12 +27,12 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "Epic {" +
-                "title='" + super.getTitle() + '\'' +
-                ", description='" + super.getDescription() + '\'' +
-                ", id=" + super.getId()+ '\'' +
-                ", status=" + super.getStatus() + '\'' +
-                ", subtaskCodes=" + subtaskCodes +
-                '}';
+        return "Epic {"
+                + "title = '" + super.getTitle() + '\''
+                + ", description = '" + super.getDescription() + '\''
+                + ", id = " + super.getId()+ '\''
+                + ", status = " + super.getStatus() + '\''
+                + ", subtaskCodes = " + subtaskCodes
+                + '}';
     }
 }
