@@ -23,7 +23,7 @@ public class HandMadeLinkedList {
     }
 
     private void removeNode(Node<Task> node) {
-        if (head == null || node == null){
+        if (head == null || node == null) {
             return;
         }
 

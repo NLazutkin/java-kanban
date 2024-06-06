@@ -91,7 +91,7 @@ public class InMemoryTaskManager implements TaskManager {
     public boolean clearEpicList() {
         if (!epicList.isEmpty()) {
             for (Epic epic : epicList.values()) {
-                for (Integer code : epic.getSubtaskCodes()){
+                for (Integer code : epic.getSubtaskCodes()) {
                     subtaskList.remove(code);
                     historyManager.removeFromHistoryList(code);
                 }
