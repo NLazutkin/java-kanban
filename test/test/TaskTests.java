@@ -6,9 +6,6 @@ import manage.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Task;
-
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTests {
@@ -18,7 +15,6 @@ public class TaskTests {
     @BeforeEach
     void beforeEach() {
         taskManager = Managers.getDefault();
-
         task = taskManager.createTask(new Task("Задача 1", "Задача 1"));
     }
 
@@ -28,7 +24,7 @@ public class TaskTests {
         assertNotNull(savedTask, "Задача не найдена");
         assertEquals(task, savedTask, "Задачи не совпадают");
 
-        final ArrayList<Task> tasks = taskManager.getTasks();
+        final var tasks = taskManager.getTasks();
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач");
@@ -41,18 +37,15 @@ public class TaskTests {
 
         int taskId = task.getId();
         assertTrue(taskManager.deleteTask(task.getId()), "Ошибка удаления Задачи");
-
         assertNull(taskManager.getTaskFromList(taskId), "Задача найдена, ошибка удаления");
     }
 
     @Test
     void checkClearTasks() {
-        final ArrayList<Task> tasks = taskManager.getTasks();
+        final var tasks = taskManager.getTasks();
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Список задач перед удалением пуст");
-
         assertTrue(taskManager.clearTasksList(), "Ошибка очистки списка Задач");
-
         assertNull(taskManager.getTasks(), "Список задач не пуст, ошибка удаления");
     }
 
@@ -62,8 +55,9 @@ public class TaskTests {
         assertNotNull(savedTask, "Задача не найдена");
         assertEquals(task, savedTask, "Задачи не совпадают");
 
-        assertNotNull(taskManager.updateTask(new Task("Задача 1.1", "Задача 1.1", task.getId(), TaskStatuses.IN_PROGRESS))
-                        ,"Ошибка обновления задачи");
+        assertNotNull(taskManager.updateTask(new Task("Задача 1.1", "Задача 1.1", task.getId(),
+                                                        TaskStatuses.IN_PROGRESS)),
+                                    "Ошибка обновления задачи");
 
         final Task updatedTask = taskManager.getTaskFromList(savedTask.getId());
 

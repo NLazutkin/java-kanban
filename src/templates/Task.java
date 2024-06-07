@@ -4,9 +4,9 @@ import enums.TaskStatuses;
 import java.util.Objects;
 
 public class Task {
-    private int id ;
-    private String title;
-    private String description;
+    private int id;
+    private final String title;
+    private final String description;
     private TaskStatuses status = TaskStatuses.NEW;
 
     public Task(String title, String description) {
@@ -53,17 +53,17 @@ public class Task {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, title, description, status);
     }
 
     @Override
     public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                '}';
+        return "Task {"
+                + "title='" + title + '\''
+                + ", description='" + description + '\''
+                + ", id=" + id
+                + ", status=" + status
+                + '}';
     }
 }
 
