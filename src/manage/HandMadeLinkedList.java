@@ -8,6 +8,19 @@ public class HandMadeLinkedList {
     private Node<Task> tail;
     private final Map<Integer, Node<Task>> nodeHashMap = new HashMap<>();
 
+    private Node<Task> linkFirst(Task task) {
+        final Node<Task> oldHead = head;
+        final Node<Task> newNode = new Node<>(null, task, oldHead);
+        head = newNode;
+        if (oldHead == null) {
+            tail = newNode;
+        } else {
+            oldHead.prev = newNode;
+        }
+
+        return newNode;
+    }
+
     private Node<Task> linkLast(Task task) {
         final Node<Task> oldTail = tail;
         final Node<Task> newNode = new Node<>(oldTail, task, null);
@@ -43,6 +56,14 @@ public class HandMadeLinkedList {
         }
     }
 
+    public void addFirst(Task task) {
+        int taskId = task.getId();
+        if (!nodeHashMap.isEmpty() && nodeHashMap.containsKey(taskId)) {
+            removeNode(nodeHashMap.get(taskId));
+        }
+        nodeHashMap.put(taskId, linkFirst(task));
+    }
+
     public void add(Task task) {
         int taskId = task.getId();
         if (!nodeHashMap.isEmpty() && nodeHashMap.containsKey(taskId)) {
@@ -65,5 +86,51 @@ public class HandMadeLinkedList {
         }
 
         return listTasks;
+    }
+
+    public List<Task> getLinkedTasks() {
+        List<Task> listTasks = new ArrayList<>();
+        HandMadeListIterator nodesIter = new HandMadeListIterator(head);
+        while (nodesIter.hasNext()) {
+            listTasks.add(nodesIter.next().task);
+        }
+
+        return listTasks;
+    }
+
+    public List<Task> getLinkedTasksReverse() {
+        List<Task> listTasks = new ArrayList<>();
+        HandMadeListIterator nodesIter = new HandMadeListIterator(tail);
+        while (nodesIter.hasNext()) {
+            listTasks.add(nodesIter.prev().task);
+        }
+
+        return listTasks;
+    }
+
+    public Task getFirst() {
+        final Node<Task> curHead = head;
+        if (curHead == null) {
+            throw new NoSuchElementException();
+        }
+
+        return head.task;
+    }
+
+    public Task getLast() {
+        final Node<Task> curTail = tail;
+        if (curTail == null){
+            throw new NoSuchElementException();
+        }
+
+        return tail.task;
+    }
+
+    public boolean isEmpty() {
+        return nodeHashMap.isEmpty();
+    }
+
+    public int size() {
+        return nodeHashMap.size();
     }
 }

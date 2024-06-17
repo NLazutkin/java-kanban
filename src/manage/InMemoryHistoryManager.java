@@ -11,6 +11,10 @@ public class InMemoryHistoryManager implements HistoryManager {
         return historyList.getTasks();
     }
 
+    public List<Task> getLinkedHistory() {
+        return historyList.getLinkedTasks();
+    }
+
     @Override
     public void addInHistoryList(Task task) {
         historyList.add(task);

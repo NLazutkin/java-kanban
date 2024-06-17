@@ -250,6 +250,43 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    @Override
+    public List<Task> getLinkedHistory() {
+        return historyManager.getLinkedHistory();
+    }
+
+    private TaskStatuses calculateEpicStatus(int id) {
+        List<Subtask> subtaskArrayList = getSubtaskByEpicId(id);
+        int doneStatusCount = 0;
+        int inProgressStatusCount = 0;
+        int newStatusCount = 0;
+
+        TaskStatuses epicStatus = TaskStatuses.IN_PROGRESS;
+
+        if (!subtaskArrayList.isEmpty()) {
+            for (Subtask subtaskFromList : subtaskArrayList) {
+                TaskStatuses subtaskStatus = subtaskFromList.getStatus();
+                if (subtaskStatus == TaskStatuses.DONE) {
+                    doneStatusCount++;
+                } else if (subtaskStatus == TaskStatuses.IN_PROGRESS) {
+                    inProgressStatusCount++;
+                } else {
+                    newStatusCount++;
+                }
+            }
+
+            if (doneStatusCount == 0 && inProgressStatusCount == 0) {
+                epicStatus = TaskStatuses.NEW;
+            } else if (newStatusCount == 0 && inProgressStatusCount == 0) {
+                epicStatus = TaskStatuses.DONE;
+            }
+        } else {
+            epicStatus = TaskStatuses.NEW;
+        }
+
+        return epicStatus;
+    }
+
     private void refreshEpicStatusBySubtask(Subtask subtask) {
         refreshStatus(subtask.getEpicId());
     }
@@ -263,33 +300,8 @@ public class InMemoryTaskManager implements TaskManager {
             Epic epic = epicList.get(epicId);
             if (epic != null) {
                 updateEpic(new Epic(epic.getTitle(), epic.getDescription(), epic.getId(),
-                            calculateEpicStatus(getSubtaskStatusesList(epic.getId())), epic.getSubtaskCodes()));
+                            calculateEpicStatus(epic.getId()), epic.getSubtaskCodes()));
             }
         }
-    }
-
-    private List<TaskStatuses> getSubtaskStatusesList(int id) {
-        List<Subtask> subtaskArrayList = getSubtaskByEpicId(id);
-        List<TaskStatuses> statuses = new ArrayList<>();
-        if (!subtaskArrayList.isEmpty()) {
-            for (Subtask subtaskFromList : subtaskArrayList) {
-                statuses.add(subtaskFromList.getStatus());
-            }
-        }
-        return statuses;
-    }
-
-    private TaskStatuses calculateEpicStatus(List<TaskStatuses> statuses) {
-        TaskStatuses epicStatus = TaskStatuses.IN_PROGRESS;
-        if (!statuses.isEmpty()) {
-            if (!statuses.contains(TaskStatuses.DONE) && !statuses.contains(TaskStatuses.IN_PROGRESS)) {
-                epicStatus = TaskStatuses.NEW;
-            } else if (!statuses.contains(TaskStatuses.NEW) && !statuses.contains(TaskStatuses.IN_PROGRESS)) {
-                epicStatus = TaskStatuses.DONE;
-            }
-        } else {
-            epicStatus = TaskStatuses.NEW;
-        }
-        return epicStatus;
     }
 }

@@ -78,6 +78,12 @@ public class Main {
             System.out.println(task);
         }
 
+        System.out.println(" ");
+        System.out.println("Linked.:");
+        for (Task task : taskManager.getLinkedHistory()) {
+            System.out.println(task);
+        }
+
         // user scenario
         subtask2 = taskManager.getSubtaskFromList(subtask2.getId());
         task1 = taskManager.getTaskFromList(task1.getId());
@@ -92,10 +98,22 @@ public class Main {
             System.out.println(task);
         }
 
+        System.out.println(" ");
+        System.out.println("Linked change.:");
+        for (Task task : taskManager.getLinkedHistory()) {
+            System.out.println(task);
+        }
+
         boolean resultTask2 = taskManager.deleteTask(task2.getId());
         System.out.println(" ");
         System.out.println("История польз. удалена Задача 2:");
         for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println(" ");
+        System.out.println("Linked del task 2.:");
+        for (Task task : taskManager.getLinkedHistory()) {
             System.out.println(task);
         }
 
@@ -107,6 +125,12 @@ public class Main {
         System.out.println(" ");
         System.out.println("История польз. удален Эпик1 и все его подзадачи:");
         for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println(" ");
+        System.out.println("Linked del epic1 and his subtasks.:");
+        for (Task task : taskManager.getLinkedHistory()) {
             System.out.println(task);
         }
     }
