@@ -1,4 +1,4 @@
-package manage;
+package manage.HistoryManager;
 
 public class Node<T> {
     public T task;

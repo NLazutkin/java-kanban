@@ -1,6 +1,7 @@
-package manage;
+package manage.HistoryManager;
 
 import templates.Task;
+
 import java.util.List;
 
 public interface HistoryManager {

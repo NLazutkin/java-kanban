@@ -1,12 +1,14 @@
-package test;
+package test.manage.HistoryManager;
 
 import manage.Managers;
-import manage.TaskManager;
+import manage.TaskManager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Task;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
@@ -21,16 +23,12 @@ public class HistoryManagerTest {
     @Test
     void checkAddTasksToHistoryManager() {
         Task task = taskManager.createTask(new Task("Задача 1", "Задача 1"));
-        Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
         assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
                 + " не пуста перед запуском!");
 
         final Task savedTask1 = taskManager.getTaskFromList(task.getId());
         assertEquals(1, taskManager.getHistory().size(), "В истории задач не 1 запись");
-
-        final Epic savedEpic1 = taskManager.getEpicFromList(epic.getId());
-        assertEquals(2, taskManager.getHistory().size(), "В истории задач не 2 записи");
     }
 
     @Test
@@ -39,19 +37,20 @@ public class HistoryManagerTest {
         Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2"));
         Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
-        assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
-                +" не пуста перед запуском!");
+        assertEquals(0, taskManager.getLinkedHistory().size(), "История вызовов задач, "
+                + " не пуста перед запуском!");
 
         final Task savedTask1 = taskManager.getTaskFromList(task1.getId());
         final Task savedTask2 = taskManager.getTaskFromList(task2.getId());
         final Epic savedEpic = taskManager.getEpicFromList(epic.getId());
 
-        List<Task> taskList = taskManager.getHistory();
+        List<Task> taskList = taskManager.getLinkedHistory();
         Task firstTask = taskList.getFirst();
         Task lastTask = taskList.getLast();
 
-        assertEquals(savedTask1, firstTask, "Первый элемент в списке сохранен некорректно!");
-        assertEquals(savedEpic, lastTask, "Последний элемент в списке сохранен некорректно!");
+        assertEquals(3, taskManager.getLinkedHistory().size(), "История вызовов задач не заполняется!");
+        assertEquals(firstTask, savedTask1, "Элемент не удален из истории!");
+        assertEquals(lastTask, savedEpic, "Элемент не удален из истории!");
     }
 
     @Test
@@ -61,7 +60,7 @@ public class HistoryManagerTest {
         Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
         assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
-                +" не пуста перед запуском!");
+                + " не пуста перед запуском!");
 
         final Task savedTask1 = taskManager.getTaskFromList(task1.getId());
         final Task savedTask2 = taskManager.getTaskFromList(task2.getId());

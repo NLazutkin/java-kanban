@@ -1,4 +1,4 @@
-package manage;
+package manage.TaskManager;
 
 import templates.Epic;
 import templates.Subtask;
@@ -12,8 +12,6 @@ public interface TaskManager {
     Epic createEpic(Epic epic);
 
     Subtask createSubtask(Subtask subtask);
-
-    void createRelation(Epic epic, Subtask subtask);
 
     List<Task> getTasks();
 

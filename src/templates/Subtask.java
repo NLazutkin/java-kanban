@@ -1,12 +1,14 @@
 package templates;
 
 import enums.TaskStatuses;
+import enums.TaskTypes;
 
 public class Subtask extends Task {
     private int epicId;
 
-    public Subtask(String title, String description) {
+    public Subtask(String title, String description, int epicId) {
         super(title, description);
+        this.epicId = epicId;
     }
 
     public Subtask(String title, String description, int id, TaskStatuses status, int epicId) {
@@ -24,13 +26,17 @@ public class Subtask extends Task {
         return epicId;
     }
 
+    public TaskTypes getType() {
+        return TaskTypes.SUBTASK;
+    }
+
     @Override
     public String toString() {
         return "Subtask {"
                 + "title = '" + super.getTitle() + '\''
                 + ", description = '" + super.getDescription() + '\''
-                + ", id = " + super.getId() + '\''
-                + ", status = " + super.getStatus() + '\''
+                + ", id = " + super.getId()
+                + ", status = " + super.getStatus()
                 + ", epicID = " + epicId
                 + '}';
     }
