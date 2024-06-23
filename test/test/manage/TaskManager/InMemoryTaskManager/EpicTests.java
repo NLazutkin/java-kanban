@@ -1,13 +1,14 @@
-package test;
+package test.manage.TaskManager.InMemoryTaskManager;
 
 import enums.TaskStatuses;
 import manage.Managers;
-import manage.TaskManager;
+import manage.TaskManager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTests {
@@ -20,7 +21,7 @@ class EpicTests {
         taskManager = Managers.getDefault();
 
         epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
-        subtask = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1"));
+        subtask = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1", epic.getId()));
     }
 
     @Test
@@ -38,11 +39,6 @@ class EpicTests {
 
     @Test
     void isRelationCreated() {
-        assertEquals(0, epic.getSubtaskCodes().size(), "Список уже заполнен!");
-        assertEquals(0, subtask.getEpicId(), "Найдена ссылка на Эпик до создания связи");
-
-        taskManager.createRelation(epic, subtask);
-
         assertEquals(1, epic.getSubtaskCodes().size(), "Список подзадач пуст!");
         assertEquals(epic.getSubtaskCodes().getFirst(), subtask.getId(), "Отсутствует связь Эпик -> Подзадача");
         assertEquals(subtask.getEpicId(), epic.getId(), "Отсутствует связь Подзадача -> Эпик");
@@ -50,11 +46,11 @@ class EpicTests {
 
     @Test
     void isEpicContentedToThemSelf() {
-        assertEquals(0, epic.getSubtaskCodes().size(), "Список уже заполнен!");
+        assertEquals(epic.getSubtaskCodes().getFirst(), subtask.getId(), "Отсутствует связь Эпик -> Подзадача");
 
         epic.addSubtaskCode(epic.getId());
 
-        assertEquals(0, epic.getSubtaskCodes().size(), "Связь Эпик -> Эпик запрещена");
+        assertNotEquals(epic.getSubtaskCodes().getFirst(), epic.getId(), "Связь Эпик -> Эпик запрещена");
     }
 
     @Test
@@ -62,7 +58,6 @@ class EpicTests {
         assertNotNull(epic, "Эпик не найден");
         assertNotNull(subtask, "Подзадача не найдена");
 
-        taskManager.createRelation(epic, subtask);
         int epicId = epic.getId();
         int subtaskId = subtask.getId();
         assertTrue(taskManager.deleteEpic(epic.getId()), "Ошибка удаления Эпика");
@@ -73,8 +68,6 @@ class EpicTests {
 
     @Test
     void checkClearEpics() {
-        taskManager.createRelation(epic, subtask);
-
         final var epics = taskManager.getEpics();
         assertNotNull(epics, "Эпики не возвращаются");
         assertEquals(1, epics.size(), "Список Эпиков перед удалением пуст");
@@ -85,8 +78,8 @@ class EpicTests {
 
         assertTrue(taskManager.clearEpicList(), "Ошибка очистки списка Эпиков и их подзадач");
 
-        assertNull(taskManager.getEpics(), "Список Эпиков не пуст, ошибка удаления");
-        assertNull(taskManager.getSubtasks(), "Список Подзадачи не пуст, ошибка удаления");
+        assertEquals(0, taskManager.getEpics().size(), "Список Эпиков не пуст, ошибка удаления");
+        assertEquals(0, taskManager.getSubtasks().size(), "Список Подзадачи не пуст, ошибка удаления");
     }
 
     @Test
@@ -96,11 +89,11 @@ class EpicTests {
         assertEquals(epic, savedEpic, "Эпики не совпадают");
 
         assertNotNull(taskManager.updateEpic(new Epic("Эпик 1.1",
-                                                    "Эпик 1.1",
-                                                    epic.getId(),
-                                                    TaskStatuses.IN_PROGRESS,
-                                                    epic.getSubtaskCodes())),
-                    "Ошибка обновления Эпика");
+                        "Эпик 1.1",
+                        epic.getId(),
+                        TaskStatuses.IN_PROGRESS,
+                        epic.getSubtaskCodes())),
+                "Ошибка обновления Эпика");
 
         final Task updatedEpic = taskManager.getEpicFromList(savedEpic.getId());
 

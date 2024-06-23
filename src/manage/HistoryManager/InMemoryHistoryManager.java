@@ -1,6 +1,7 @@
-package manage;
+package manage.HistoryManager;
 
 import templates.Task;
+
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -11,6 +12,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         return historyList.getTasks();
     }
 
+    @Override
     public List<Task> getLinkedHistory() {
         return historyList.getLinkedTasks();
     }

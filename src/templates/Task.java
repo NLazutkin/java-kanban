@@ -1,6 +1,8 @@
 package templates;
 
 import enums.TaskStatuses;
+import enums.TaskTypes;
+
 import java.util.Objects;
 
 public class Task {
@@ -41,14 +43,18 @@ public class Task {
         return status;
     }
 
+    public TaskTypes getType() {
+        return TaskTypes.TASK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return id == task.id && Objects.equals(title, task.title)
-                             && Objects.equals(description, task.description)
-                             && Objects.equals(status, task.status);
+                && Objects.equals(description, task.description)
+                && Objects.equals(status, task.status);
     }
 
     @Override

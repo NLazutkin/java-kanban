@@ -1,6 +1,7 @@
-package manage;
+package manage.HistoryManager;
 
 import templates.Task;
+
 import java.util.*;
 
 public class HandMadeLinkedList {
@@ -90,9 +91,9 @@ public class HandMadeLinkedList {
 
     public List<Task> getLinkedTasks() {
         List<Task> listTasks = new ArrayList<>();
-        HandMadeListIterator nodesIter = new HandMadeListIterator(head);
-        while (nodesIter.hasNext()) {
-            listTasks.add(nodesIter.next().task);
+        HandMadeListIterator nodesIterator = new HandMadeListIterator(head);
+        while (nodesIterator.hasNext()) {
+            listTasks.add(nodesIterator.next().task);
         }
 
         return listTasks;
@@ -100,9 +101,9 @@ public class HandMadeLinkedList {
 
     public List<Task> getLinkedTasksReverse() {
         List<Task> listTasks = new ArrayList<>();
-        HandMadeListIterator nodesIter = new HandMadeListIterator(tail);
-        while (nodesIter.hasNext()) {
-            listTasks.add(nodesIter.prev().task);
+        HandMadeListIterator nodesIterator = new HandMadeListIterator(tail);
+        while (nodesIterator.hasNext()) {
+            listTasks.add(nodesIterator.prev().task);
         }
 
         return listTasks;
@@ -119,7 +120,7 @@ public class HandMadeLinkedList {
 
     public Task getLast() {
         final Node<Task> curTail = tail;
-        if (curTail == null){
+        if (curTail == null) {
             throw new NoSuchElementException();
         }
 

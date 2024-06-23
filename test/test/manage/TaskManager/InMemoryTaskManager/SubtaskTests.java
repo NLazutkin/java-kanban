@@ -1,13 +1,14 @@
-package test;
+package test.manage.TaskManager.InMemoryTaskManager;
 
 import enums.TaskStatuses;
 import manage.Managers;
-import manage.TaskManager;
+import manage.TaskManager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SubtaskTests {
@@ -21,8 +22,8 @@ class SubtaskTests {
         taskManager = Managers.getDefault();
 
         epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
-        subtask1 = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1"));
-        subtask2 = taskManager.createSubtask(new Subtask("Подзадача 2", "Эпик 1"));
+        subtask1 = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1", epic.getId()));
+        subtask2 = taskManager.createSubtask(new Subtask("Подзадача 2", "Эпик 1", epic.getId()));
     }
 
     @Test
@@ -41,35 +42,28 @@ class SubtaskTests {
 
     @Test
     void isRelationCreated() {
-        assertEquals(0, epic.getSubtaskCodes().size(), "Список уже заполнен!");
-        assertEquals(0, subtask1.getEpicId(), "Найдена ссылка на Эпик до создания связи");
-
-        taskManager.createRelation(epic, subtask1);
-
-        assertEquals(1, epic.getSubtaskCodes().size(), "Список подзадач пуст!");
+        assertEquals(2, epic.getSubtaskCodes().size(), "Список подзадач пуст!");
         assertEquals(epic.getSubtaskCodes().getFirst(), subtask1.getId(), "Отсутствует связь Эпик -> Подзадача");
         assertEquals(subtask1.getEpicId(), epic.getId(), "Отсутствует связь Подзадача -> Эпик");
     }
 
     @Test
     void isSubtaskContentedToThemSelf() {
-        assertEquals(0, subtask1.getEpicId(), "Найдена ссылка на Эпик до создания связи");
+        assertEquals(subtask1.getEpicId(), epic.getId(), "Отсутствует связь Подзадача -> Эпик");
 
         subtask1.setEpicId(subtask1.getId());
 
-        assertEquals(0, subtask1.getEpicId(), "Cвязь Подзадача -> Подзадача запрещена");
+        assertNotEquals(subtask1.getEpicId(), subtask1.getId(), "Cвязь Подзадача -> Подзадача запрещена");
     }
 
     @Test
     void checkDeleteSubtask() {
         assertNotNull(subtask1, "Подзадача не найдена");
 
-        taskManager.createRelation(epic, subtask1);
-
         int subtaskId = subtask1.getId();
         assertTrue(taskManager.deleteSubtask(subtask1.getId()), "Ошибка удаления Подзадачи");
         assertNull(taskManager.getSubtaskFromList(subtaskId), "Подзадача найдена, ошибка удаления");
-        assertEquals(0, epic.getSubtaskCodes().size(), "Связь Эпик -> Подзадача не удалена");
+        assertEquals(1, epic.getSubtaskCodes().size(), "Связь Эпик -> Подзадача не удалена");
     }
 
     void prepareDataForTestingEpicStatusWhenDeleteSubtask() {
@@ -77,21 +71,18 @@ class SubtaskTests {
         assertNotNull(subtask2, "Подзадача не найдена");
         assertEquals(TaskStatuses.NEW, epic.getStatus(), "Статус созданного Эпика не равен" + TaskStatuses.NEW);
 
-        taskManager.createRelation(epic, subtask1);
-        taskManager.createRelation(epic, subtask2);
-
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                                                            "Эпик 1",
-                                                            subtask1.getId(),
-                                                            TaskStatuses.IN_PROGRESS,
-                                                            subtask1.getEpicId())),
+                        "Эпик 1",
+                        subtask1.getId(),
+                        TaskStatuses.IN_PROGRESS,
+                        subtask1.getEpicId())),
                 "Ошибка обновления Подзадачи");
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 2.1",
-                                                            "Эпик 1",
-                                                            subtask2.getId(),
-                                                            TaskStatuses.DONE,
-                                                            subtask2.getEpicId())),
+                        "Эпик 1",
+                        subtask2.getId(),
+                        TaskStatuses.DONE,
+                        subtask2.getEpicId())),
                 "Ошибка обновления Подзадачи");
     }
 
@@ -124,7 +115,7 @@ class SubtaskTests {
         final Epic savedEpic = taskManager.getEpicFromList(epic.getId());
         assertNotNull(savedEpic, "Эпик не найден");
 
-        assertEquals(TaskStatuses.IN_PROGRESS, savedEpic.getStatus(),"Статус Эпика не изменен");
+        assertEquals(TaskStatuses.IN_PROGRESS, savedEpic.getStatus(), "Статус Эпика не изменен");
     }
 
     @Test
@@ -148,24 +139,21 @@ class SubtaskTests {
 
     @Test
     void checkClearSubtasksAndRefreshEpicStatuses() {
-        taskManager.createRelation(epic, subtask1);
-        taskManager.createRelation(epic, subtask2);
-
         final var subtasks = taskManager.getSubtasks();
         assertNotNull(subtasks, "Подзадачи не возвращаются");
         assertEquals(2, subtasks.size(), "Список Подзадач перед удалением пуст");
 
         assertTrue(taskManager.clearSubtaskList(), "Ошибка удаления Подзадачи");
 
-        assertNull(taskManager.getSubtasks(), "Список Подзадачи не пуст, ошибка удаления");
+        assertEquals(0, taskManager.getSubtasks().size(), "Список Подзадачи не пуст, ошибка удаления");
 
         final var epics = taskManager.getEpics();
         for (Epic epic : epics) {
             assertEquals(0, epic.getSubtaskCodes().size(), "Список Подзадач Эпика id = "
-                        + epic.getId()
-                        + " title = "
-                        + epic.getTitle()
-                        + " не очищен!");
+                    + epic.getId()
+                    + " title = "
+                    + epic.getTitle()
+                    + " не очищен!");
 
             assertEquals(TaskStatuses.NEW, epic.getStatus(), "Статус Эпика не изменен");
         }
@@ -175,42 +163,38 @@ class SubtaskTests {
     void checkUpdateSubtask() {
         assertNotNull(subtask1, "Подзадача не найдена");
 
-        taskManager.createRelation(epic, subtask1);
-
         final Task savedSubtask = taskManager.getSubtaskFromList(subtask1.getId());
         assertNotNull(savedSubtask, "Подзадача не найдена");
         assertEquals(subtask1, savedSubtask, "Подзадачи не совпадают");
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                                                    "Эпик 1",
-                                                    subtask1.getId(),
-                                                    TaskStatuses.IN_PROGRESS,
-                                                    subtask1.getEpicId())),
+                        "Эпик 1",
+                        subtask1.getId(),
+                        TaskStatuses.IN_PROGRESS,
+                        subtask1.getEpicId())),
                 "Ошибка обновления Подзадачи");
 
         final Task updatedSubtask = taskManager.getSubtaskFromList(savedSubtask.getId());
 
         assertNotNull(updatedSubtask, "Подзадача не обновлен");
         assertEquals(savedSubtask.getId(), updatedSubtask.getId(), "ID Подзадачи до обновления "
-                    + "и после не равны");
+                + "и после не равны");
         assertNotEquals(savedSubtask, updatedSubtask, "Содержимое Подзадачи не обновлено");
     }
 
-    void prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses expectedResult) {
+    void prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses updateTo, TaskStatuses expectedResult) {
         assertNotNull(subtask1, "Подзадача не найдена");
-
-        taskManager.createRelation(epic, subtask1);
 
         final Task savedSubtask = taskManager.getSubtaskFromList(subtask1.getId());
         assertNotNull(savedSubtask, "Подзадача не найдена");
-        assertEquals(TaskStatuses.NEW, epic.getStatus(),"Статус созданного Эпика не равен"
-                    + TaskStatuses.NEW);
+        assertEquals(TaskStatuses.NEW, epic.getStatus(), "Статус созданного Эпика не равен"
+                + TaskStatuses.NEW);
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                                                    "Эпик 1",
-                                                    subtask1.getId(),
-                                                    expectedResult,
-                                                    subtask1.getEpicId())),
+                        "Эпик 1",
+                        subtask1.getId(),
+                        updateTo,
+                        subtask1.getEpicId())),
                 "Ошибка обновления Подзадачи");
 
         final Task updatedSubtask = taskManager.getSubtaskFromList(savedSubtask.getId());
@@ -224,36 +208,33 @@ class SubtaskTests {
 
     @Test
     void shouldEpicStatusINPROGRESSWhenUpdateSubtask() {
-        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.IN_PROGRESS);
+        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.IN_PROGRESS, TaskStatuses.IN_PROGRESS);
     }
 
     @Test
     void shouldEpicStatusDONEWhenUpdateSubtask() {
-        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.DONE);
+        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.DONE, TaskStatuses.IN_PROGRESS);
     }
 
     void prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses expectedResult) {
         assertNotNull(subtask1, "Подзадача не найдена");
         assertNotNull(subtask2, "Подзадача не найдена");
 
-        taskManager.createRelation(epic, subtask1);
-        taskManager.createRelation(epic, subtask2);
-
         assertEquals(TaskStatuses.NEW, epic.getStatus(), "Статус созданного Эпика не равен"
-                    + TaskStatuses.NEW);
+                + TaskStatuses.NEW);
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                                                    "Эпик 1",
-                                                    subtask1.getId(),
-                                                    TaskStatuses.DONE,
-                                                    subtask1.getEpicId())),
+                        "Эпик 1",
+                        subtask1.getId(),
+                        TaskStatuses.DONE,
+                        subtask1.getEpicId())),
                 "Ошибка обновления Подзадачи");
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                                                    "Эпик 1",
-                                                    subtask2.getId(),
-                                                    expectedResult,
-                                                    subtask2.getEpicId())),
+                        "Эпик 1",
+                        subtask2.getId(),
+                        expectedResult,
+                        subtask2.getEpicId())),
                 "Ошибка обновления Подзадачи");
 
         final Epic savedEpic = taskManager.getEpicFromList(epic.getId());

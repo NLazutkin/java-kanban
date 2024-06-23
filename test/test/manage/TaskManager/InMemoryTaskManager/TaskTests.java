@@ -1,11 +1,12 @@
-package test;
+package test.manage.TaskManager.InMemoryTaskManager;
 
 import enums.TaskStatuses;
 import manage.Managers;
-import manage.TaskManager;
+import manage.TaskManager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Task;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TaskTests {
@@ -46,7 +47,7 @@ public class TaskTests {
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Список задач перед удалением пуст");
         assertTrue(taskManager.clearTasksList(), "Ошибка очистки списка Задач");
-        assertNull(taskManager.getTasks(), "Список задач не пуст, ошибка удаления");
+        assertEquals(0, taskManager.getTasks().size(), "Список задач не пуст, ошибка удаления");
     }
 
     @Test
@@ -56,8 +57,8 @@ public class TaskTests {
         assertEquals(task, savedTask, "Задачи не совпадают");
 
         assertNotNull(taskManager.updateTask(new Task("Задача 1.1", "Задача 1.1", task.getId(),
-                                                        TaskStatuses.IN_PROGRESS)),
-                                    "Ошибка обновления задачи");
+                        TaskStatuses.IN_PROGRESS)),
+                "Ошибка обновления задачи");
 
         final Task updatedTask = taskManager.getTaskFromList(savedTask.getId());
 
@@ -65,5 +66,4 @@ public class TaskTests {
         assertEquals(savedTask.getId(), updatedTask.getId(), "ID Задачи до обновления и после не равны");
         assertNotEquals(savedTask, updatedTask, "Содержимое задачи не обновлено");
     }
-
 }

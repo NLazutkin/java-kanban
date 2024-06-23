@@ -1,5 +1,5 @@
 import manage.Managers;
-import manage.TaskManager;
+import manage.TaskManager.TaskManager;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
@@ -18,22 +18,22 @@ public class Main {
         Task task3 = taskManager.createTask(new Task(taskTitle + "3", taskTitle + "3"));
         Epic epic1 = taskManager.createEpic(new Epic(epicTitle + "1", epicTitle + "1"));
         Epic epic2 = taskManager.createEpic(new Epic(epicTitle + "2", epicTitle + "2"));
-        Subtask subtask1 = taskManager.createSubtask(new Subtask(subtaskTitle + "1", subtask1Description));
-        Subtask subtask2 = taskManager.createSubtask(new Subtask(subtaskTitle + "2", subtask1Description));
-        Subtask subtask3 = taskManager.createSubtask(new Subtask(subtaskTitle + "3", subtask1Description));
-        Subtask subtask4 = taskManager.createSubtask(new Subtask(subtaskTitle + "4", subtask1Description));
-        Subtask subtask5 = taskManager.createSubtask(new Subtask(subtaskTitle + "5", subtask2Description));
-        Subtask subtask6 = taskManager.createSubtask(new Subtask(subtaskTitle + "6", subtask2Description));
-        Subtask subtask7 = taskManager.createSubtask(new Subtask(subtaskTitle + "7", subtask2Description));
-        Subtask subtask8 = taskManager.createSubtask(new Subtask(subtaskTitle + "8", subtask2Description));
-        taskManager.createRelation(epic1, subtask1);
-        taskManager.createRelation(epic1, subtask2);
-        taskManager.createRelation(epic1, subtask3);
-        taskManager.createRelation(epic1, subtask4);
-        taskManager.createRelation(epic2, subtask5);
-        taskManager.createRelation(epic2, subtask6);
-        taskManager.createRelation(epic2, subtask7);
-        taskManager.createRelation(epic2, subtask8);
+        Subtask subtask1 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "1", subtask1Description, epic1.getId()));
+        Subtask subtask2 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "2", subtask1Description, epic1.getId()));
+        Subtask subtask3 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "3", subtask1Description, epic1.getId()));
+        Subtask subtask4 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "4", subtask1Description, epic1.getId()));
+        Subtask subtask5 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "5", subtask2Description, epic2.getId()));
+        Subtask subtask6 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "6", subtask2Description, epic2.getId()));
+        Subtask subtask7 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "7", subtask2Description, epic2.getId()));
+        Subtask subtask8 = taskManager.createSubtask(
+                new Subtask(subtaskTitle + "8", subtask2Description, epic2.getId()));
 
         task1 = taskManager.getTaskFromList(task1.getId());
         task2 = taskManager.getTaskFromList(task2.getId());
