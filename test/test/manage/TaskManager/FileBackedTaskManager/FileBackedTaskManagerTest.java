@@ -48,24 +48,24 @@ public class FileBackedTaskManagerTest {
     }
 
     private Task fromString(String value) {
-        String[] data = value.split(",");
-        int id = Integer.parseInt(data[0]);
-        TaskTypes type = TaskTypes.valueOf(data[1]);
-        String title = data[2];
-        TaskStatuses status = TaskStatuses.valueOf(data[3]);
-        String description = data[4];
+        String[] dataArray = value.split(",");
+        int id = Integer.parseInt(dataArray[0]);
+        TaskTypes type = TaskTypes.valueOf(dataArray[1]);
+        String title = dataArray[2];
+        TaskStatuses status = TaskStatuses.valueOf(dataArray[3]);
+        String description = dataArray[4];
 
         switch (type) {
             case TASK:
                 return new Task(title, description, id, status);
             case EPIC:
                 List<Integer> codes = new ArrayList<>();
-                for (String code : data[5].split(";")) {
+                for (String code : dataArray[5].split(";")) {
                     codes.add(Integer.parseInt(code));
                 }
                 return new Epic(title, description, id, status, codes);
             case SUBTASK:
-                return new Subtask(title, description, id, status, Integer.parseInt(data[5]));
+                return new Subtask(title, description, id, status, Integer.parseInt(dataArray[5]));
             default:
                 throw new IllegalStateException("Неожиданное значение: " + type);
         }
