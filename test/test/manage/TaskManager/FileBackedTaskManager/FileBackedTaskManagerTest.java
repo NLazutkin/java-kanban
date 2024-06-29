@@ -74,7 +74,7 @@ public class FileBackedTaskManagerTest {
     private List<Task> getTaskListFromFile(File file) {
         String TABLE_HEADER = "id,type,name,status,description,epic_id";
         List<Task> list = new ArrayList<>();
-        TaskManager taskManager = new InMemoryTaskManager();
+        int maxId = 0;
 
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (fileReader.ready()) {
@@ -84,18 +84,22 @@ public class FileBackedTaskManagerTest {
                 }
                 Task taskFromFile = fromString(line);
 
+                if (task.getId() > maxId) {
+                    maxId = task.getId();
+                }
+
                 switch (taskFromFile.getType()) {
                     case TASK:
-                        list.add(taskManager.createTask(taskFromFile));
+                        list.add(taskFromFile);
                         break;
                     case EPIC:
                         if (taskFromFile instanceof Epic) {
-                            list.add(taskManager.createEpic((Epic) taskFromFile));
+                            list.add(taskFromFile);
                         }
                         break;
                     case SUBTASK:
                         if (taskFromFile instanceof Subtask) {
-                            list.add(taskManager.createSubtask((Subtask) taskFromFile));
+                            list.add(taskFromFile);
                         }
                         break;
                     default:

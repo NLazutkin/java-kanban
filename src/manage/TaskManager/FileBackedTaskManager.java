@@ -195,6 +195,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
         }
 
+        int maxId = 0;
         FileBackedTaskManager fileBackedTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader fileReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
             while (fileReader.ready()) {
@@ -204,24 +205,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
                 Task task = fromString(line);
 
+                if (task.getId() > maxId) {
+                    maxId = task.getId();
+                }
+
                 switch (task.getType()) {
                     case TASK:
-                        fileBackedTaskManager.createTask(task);
+                        fileBackedTaskManager.taskList.put(task.getId(), task);
                         break;
                     case EPIC:
                         if (task instanceof Epic) {
-                            fileBackedTaskManager.createEpic((Epic) task);
+                            fileBackedTaskManager.epicList.put(task.getId(), (Epic) task);
                             break;
                         }
                     case SUBTASK:
                         if (task instanceof Subtask) {
-                            fileBackedTaskManager.createSubtask((Subtask) task);
+                            fileBackedTaskManager.subtaskList.put(task.getId(), (Subtask) task);
                             break;
                         }
                     default:
                         throw new IllegalStateException("Unexpected value: " + task.getType());
                 }
             }
+
+            idCounter = maxId;
         } catch (IOException exception) {
             throw new ManagerSaveException(exception.getMessage());
         }

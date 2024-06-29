@@ -3,6 +3,7 @@ import manage.TaskManager.TaskManager;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
+import enums.TaskStatuses;
 
 public class Main {
     public static void main(String[] args) {
@@ -130,6 +131,23 @@ public class Main {
 
         System.out.println(" ");
         System.out.println("Linked del epic1 and his subtasks.:");
+        for (Task task : taskManager.getLinkedHistory()) {
+            System.out.println(task);
+        }
+
+        Task updatedTask = taskManager.updateTask(new Task(task3.getTitle(),
+                task3.getDescription(),
+                task3.getId(),
+                TaskStatuses.IN_PROGRESS));
+        Task calledUpdatedTask = taskManager.getTaskFromList(updatedTask.getId());
+        System.out.println(" ");
+        System.out.println("История польз. обновлена задача 3:");
+        for (Task task : taskManager.getHistory()) {
+            System.out.println(task);
+        }
+
+        System.out.println(" ");
+        System.out.println("Linked upd task3.:");
         for (Task task : taskManager.getLinkedHistory()) {
             System.out.println(task);
         }

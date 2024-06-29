@@ -13,10 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private static int idCounter = 0;
-    private final Map<Integer, Task> taskList = new HashMap<>();
-    private final Map<Integer, Epic> epicList = new HashMap<>();
-    private final Map<Integer, Subtask> subtaskList = new HashMap<>();
+    protected static int idCounter = 0;
+    protected final Map<Integer, Task> taskList = new HashMap<>();
+    protected final Map<Integer, Epic> epicList = new HashMap<>();
+    protected final Map<Integer, Subtask> subtaskList = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     private TaskStatuses calculateEpicStatus(int id) {
@@ -77,10 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task createTask(Task task) {
         if (task != null) {
-            idCounter += 1;
-            if (task.getId() == 0) {
-                task.setId(idCounter);
-            }
+            task.setId(idCounter += 1);
             taskList.put(task.getId(), task);
         }
         return task;
@@ -89,10 +86,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic createEpic(Epic epic) {
         if (epic != null) {
-            idCounter += 1;
-            if (epic.getId() == 0) {
-                epic.setId(idCounter);
-            }
+            epic.setId(idCounter += 1);
             epicList.put(epic.getId(), epic);
         }
         return epic;
@@ -101,10 +95,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask createSubtask(Subtask subtask) {
         if (subtask != null) {
-            idCounter += 1;
-            if (subtask.getId() == 0) {
-                subtask.setId(idCounter);
-            }
+            subtask.setId(idCounter += 1);
             subtaskList.put(subtask.getId(), subtask);
             createRelation(subtask);
         }
