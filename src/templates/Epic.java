@@ -3,10 +3,12 @@ package templates;
 import enums.TaskStatuses;
 import enums.TaskTypes;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
+    private LocalDateTime endTime;
     private List<Integer> subtaskCodes = new ArrayList<>();
 
     public Epic(String title, String description) {
@@ -16,6 +18,13 @@ public class Epic extends Task {
     public Epic(String title, String description, int id, TaskStatuses status, List<Integer> subtaskCodes) {
         super(title, description, id, status);
         this.subtaskCodes = subtaskCodes;
+    }
+
+    public Epic(String title, String description, int id, TaskStatuses status, List<Integer> subtaskCodes,
+                long duration, LocalDateTime startTime, LocalDateTime endTime) {
+        super(title, description, id, status, duration, startTime);
+        this.subtaskCodes = subtaskCodes;
+        this.endTime = endTime;
     }
 
     public List<Integer> getSubtaskCodes() {
@@ -33,12 +42,27 @@ public class Epic extends Task {
     }
 
     @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public String getEndTimeToString() {
+        if (endTime == null) {
+            return "null";
+        }
+        return endTime.format(DATE_TIME_FORMATTER);
+    }
+
+    @Override
     public String toString() {
         return "Epic {"
                 + "title = '" + super.getTitle() + '\''
                 + ", description = '" + super.getDescription() + '\''
                 + ", id = " + super.getId()
                 + ", status = " + super.getStatus()
+                + ", duration = " + super.getDurationToMinutes()
+                + ", startTime = " + getStartTimeToString()
+                + ", endTime = " + getEndTimeToString()
                 + ", subtaskCodes = " + subtaskCodes
                 + '}';
     }

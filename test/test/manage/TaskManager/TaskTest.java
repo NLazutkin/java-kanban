@@ -1,22 +1,22 @@
-package test.manage.TaskManager.InMemoryTaskManager;
+package test.manage.TaskManager;
 
 import enums.TaskStatuses;
-import manage.Managers;
 import manage.TaskManager.TaskManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Task;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TaskTests {
-    private static TaskManager taskManager;
-    private static Task task;
+abstract class TaskTest<T extends TaskManager> {
+    T taskManager;
+    protected static Task task;
 
-    @BeforeEach
-    void beforeEach() {
-        taskManager = Managers.getDefault();
-        task = taskManager.createTask(new Task("Задача 1", "Задача 1"));
+    protected void init() {
+        long duration = 5;
+        LocalDateTime startTime = LocalDateTime.now();
+        task = taskManager.createTask(new Task("Задача 1", "Задача 1", duration, startTime));
     }
 
     @Test
@@ -57,7 +57,7 @@ public class TaskTests {
         assertEquals(task, savedTask, "Задачи не совпадают");
 
         assertNotNull(taskManager.updateTask(new Task("Задача 1.1", "Задача 1.1", task.getId(),
-                        TaskStatuses.IN_PROGRESS)),
+                        TaskStatuses.IN_PROGRESS, task.getDurationToMinutes(), task.getStartTime())),
                 "Ошибка обновления задачи");
 
         final Task updatedTask = taskManager.getTaskFromList(savedTask.getId());
@@ -66,4 +66,5 @@ public class TaskTests {
         assertEquals(savedTask.getId(), updatedTask.getId(), "ID Задачи до обновления и после не равны");
         assertNotEquals(savedTask, updatedTask, "Содержимое задачи не обновлено");
     }
+
 }

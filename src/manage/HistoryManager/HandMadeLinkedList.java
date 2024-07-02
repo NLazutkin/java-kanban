@@ -81,12 +81,7 @@ public class HandMadeLinkedList {
     }
 
     public List<Task> getTasks() {
-        List<Task> listTasks = new ArrayList<>();
-        for (Node<Task> node : nodeHashMap.values()) {
-            listTasks.add(node.task);
-        }
-
-        return listTasks;
+        return nodeHashMap.values().stream().map(node -> node.task).toList();
     }
 
     public List<Task> getLinkedTasks() {
@@ -102,6 +97,7 @@ public class HandMadeLinkedList {
     public List<Task> getLinkedTasksReverse() {
         List<Task> listTasks = new ArrayList<>();
         HandMadeListIterator nodesIterator = new HandMadeListIterator(tail);
+
         while (nodesIterator.hasNext()) {
             listTasks.add(nodesIterator.prev().task);
         }

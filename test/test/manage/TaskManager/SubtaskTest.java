@@ -1,29 +1,28 @@
-package test.manage.TaskManager.InMemoryTaskManager;
+package test.manage.TaskManager;
 
 import enums.TaskStatuses;
-import manage.Managers;
 import manage.TaskManager.TaskManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Subtask;
 import templates.Task;
 
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class SubtaskTests {
-    private static TaskManager taskManager;
+abstract class SubtaskTest<T extends TaskManager> {
+    T taskManager;
     private static Epic epic;
     private static Subtask subtask1;
     private static Subtask subtask2;
 
-    @BeforeEach
-    void beforeEach() {
-        taskManager = Managers.getDefault();
-
+    protected void init() {
+        long duration = 5;
+        LocalDateTime startTime = LocalDateTime.now();
         epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
-        subtask1 = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1", epic.getId()));
-        subtask2 = taskManager.createSubtask(new Subtask("Подзадача 2", "Эпик 1", epic.getId()));
+        subtask1 = taskManager.createSubtask(new Subtask("Подзадача 1", "Эпик 1", epic.getId(), duration, startTime));
+        subtask2 = taskManager.createSubtask(new Subtask("Подзадача 2", "Эпик 1", epic.getId(), duration, startTime.plusMinutes(6)));
     }
 
     @Test
@@ -75,14 +74,18 @@ class SubtaskTests {
                         "Эпик 1",
                         subtask1.getId(),
                         TaskStatuses.IN_PROGRESS,
-                        subtask1.getEpicId())),
+                        subtask1.getEpicId(),
+                        subtask1.getDurationToMinutes(),
+                        subtask1.getStartTime())),
                 "Ошибка обновления Подзадачи");
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 2.1",
                         "Эпик 1",
                         subtask2.getId(),
                         TaskStatuses.DONE,
-                        subtask2.getEpicId())),
+                        subtask2.getEpicId(),
+                        subtask2.getDurationToMinutes(),
+                        subtask2.getStartTime())),
                 "Ошибка обновления Подзадачи");
     }
 
@@ -171,7 +174,9 @@ class SubtaskTests {
                         "Эпик 1",
                         subtask1.getId(),
                         TaskStatuses.IN_PROGRESS,
-                        subtask1.getEpicId())),
+                        subtask1.getEpicId(),
+                        subtask1.getDurationToMinutes(),
+                        subtask1.getStartTime())),
                 "Ошибка обновления Подзадачи");
 
         final Task updatedSubtask = taskManager.getSubtaskFromList(savedSubtask.getId());
@@ -182,41 +187,9 @@ class SubtaskTests {
         assertNotEquals(savedSubtask, updatedSubtask, "Содержимое Подзадачи не обновлено");
     }
 
-    void prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses updateTo, TaskStatuses expectedResult) {
-        assertNotNull(subtask1, "Подзадача не найдена");
-
-        final Task savedSubtask = taskManager.getSubtaskFromList(subtask1.getId());
-        assertNotNull(savedSubtask, "Подзадача не найдена");
-        assertEquals(TaskStatuses.NEW, epic.getStatus(), "Статус созданного Эпика не равен"
-                + TaskStatuses.NEW);
-
-        assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
-                        "Эпик 1",
-                        subtask1.getId(),
-                        updateTo,
-                        subtask1.getEpicId())),
-                "Ошибка обновления Подзадачи");
-
-        final Task updatedSubtask = taskManager.getSubtaskFromList(savedSubtask.getId());
-        assertNotNull(updatedSubtask, "Подзадача не обновлен");
-
-        final Epic savedEpic = taskManager.getEpicFromList(epic.getId());
-        assertNotNull(savedEpic, "Эпик не найден");
-
-        assertEquals(expectedResult, savedEpic.getStatus(), "Статус Эпика не изменен");
-    }
-
-    @Test
-    void shouldEpicStatusINPROGRESSWhenUpdateSubtask() {
-        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.IN_PROGRESS, TaskStatuses.IN_PROGRESS);
-    }
-
-    @Test
-    void shouldEpicStatusDONEWhenUpdateSubtask() {
-        prepareDataForTestingEpicStatusWhenUpdateSubtask(TaskStatuses.DONE, TaskStatuses.IN_PROGRESS);
-    }
-
-    void prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses expectedResult) {
+    void prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses expectedResult,
+                                                           TaskStatuses subtask1Status,
+                                                           TaskStatuses subtask2Status) {
         assertNotNull(subtask1, "Подзадача не найдена");
         assertNotNull(subtask2, "Подзадача не найдена");
 
@@ -226,31 +199,57 @@ class SubtaskTests {
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
                         "Эпик 1",
                         subtask1.getId(),
-                        TaskStatuses.DONE,
-                        subtask1.getEpicId())),
+                        subtask1Status,
+                        subtask1.getEpicId(),
+                        subtask1.getDurationToMinutes(),
+                        subtask1.getStartTime())),
                 "Ошибка обновления Подзадачи");
 
         assertNotNull(taskManager.updateSubtask(new Subtask("Подзадача 1.1",
                         "Эпик 1",
                         subtask2.getId(),
-                        expectedResult,
-                        subtask2.getEpicId())),
+                        subtask2Status,
+                        subtask2.getEpicId(),
+                        subtask2.getDurationToMinutes(),
+                        subtask2.getStartTime())),
                 "Ошибка обновления Подзадачи");
 
         final Epic savedEpic = taskManager.getEpicFromList(epic.getId());
         assertNotNull(savedEpic, "Эпик не найден");
 
-        assertEquals(expectedResult, savedEpic.getStatus(), "Статус Эпика не изменен");
+        assertEquals(expectedResult, savedEpic.getStatus(), "Статус Эпика не равен " + expectedResult
+                + " при входных " + subtask1Status + ", " + subtask2Status);
     }
 
     @Test
-    void shouldEpicStatusDONEWhenUpdate2Subtask() {
-        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.DONE);
+    void shouldEpicStatusNEWWhenUpdate2SubtaskNEW() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.NEW, TaskStatuses.NEW, TaskStatuses.NEW);
     }
 
     @Test
-    void shouldEpicStatusINPROGRESSWhenUpdate2Subtask() {
-        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.IN_PROGRESS);
+    void shouldEpicStatusDONEWhenUpdate2SubtaskDONE() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.DONE, TaskStatuses.DONE, TaskStatuses.DONE);
+    }
+
+    @Test
+    void shouldEpicStatusINPROGRESSWhenUpdate2SubtaskINPROGRESS() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.IN_PROGRESS,
+                TaskStatuses.IN_PROGRESS,
+                TaskStatuses.IN_PROGRESS);
+    }
+
+    @Test
+    void shouldEpicStatusINPROGRESSWhenUpdate2SubtaskDONENEW() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.IN_PROGRESS, TaskStatuses.DONE, TaskStatuses.NEW);
+    }
+
+    @Test
+    void shouldEpicStatusINPROGRESSWhenUpdate2SubtaskINPROGRESSNEW() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.IN_PROGRESS, TaskStatuses.IN_PROGRESS, TaskStatuses.NEW);
+    }
+
+    @Test
+    void shouldEpicStatusINPROGRESSWhenUpdate2SubtaskINPROGRESSDONE() {
+        prepareDataForTestingEpicStatusWhenUpdate2Subtask(TaskStatuses.IN_PROGRESS, TaskStatuses.IN_PROGRESS, TaskStatuses.DONE);
     }
 }
-

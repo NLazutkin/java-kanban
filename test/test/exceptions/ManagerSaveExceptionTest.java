@@ -17,4 +17,12 @@ public class ManagerSaveExceptionTest {
         assertThrows(ManagerSaveException.class, () -> FileBackedTaskManager.loadFromFile(file),
                 "Ошибка проверки на содержание пути в переменной вместо файла");
     }
+
+    @Test
+    void fileIsExistDirectoryTest() {
+        File file = new File("./resources/java-kanban.csv");
+
+        assertDoesNotThrow(() -> FileBackedTaskManager.loadFromFile(file),
+                "Ошибка проверки на содержание пути в переменной вместо файла");
+    }
 }

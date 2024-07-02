@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import templates.Epic;
 import templates.Task;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +23,7 @@ public class HistoryManagerTest {
 
     @Test
     void checkAddTasksToHistoryManager() {
-        Task task = taskManager.createTask(new Task("Задача 1", "Задача 1"));
+        Task task = taskManager.createTask(new Task("Задача 1", "Задача 1", 5, LocalDateTime.now()));
 
         assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
                 + " не пуста перед запуском!");
@@ -33,8 +34,10 @@ public class HistoryManagerTest {
 
     @Test
     void checkAddTasksToFirstAndLastNodesOfHistoryManager() {
-        Task task1 = taskManager.createTask(new Task("Задача 1", "Задача 1"));
-        Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2"));
+        Task task1 = taskManager.createTask(new Task("Задача 1", "Задача 1", 5,
+                LocalDateTime.now()));
+        Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2", 5,
+                LocalDateTime.now().plusMinutes(6)));
         Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
         assertEquals(0, taskManager.getLinkedHistory().size(), "История вызовов задач, "
@@ -55,8 +58,10 @@ public class HistoryManagerTest {
 
     @Test
     void checkDeleteTasksFormMiddleOfHistoryManagerList() {
-        Task task1 = taskManager.createTask(new Task("Задача 1", "Задача 1"));
-        Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2"));
+        Task task1 = taskManager.createTask(new Task("Задача 1", "Задача 1", 5,
+                LocalDateTime.now()));
+        Task task2 = taskManager.createTask(new Task("Задача 2", "Задача 2", 5,
+                LocalDateTime.now().plusMinutes(6)));
         Epic epic = taskManager.createEpic(new Epic("Эпик 1", "Эпик 1"));
 
         assertEquals(0, taskManager.getHistory().size(), "История вызовов задач, "
