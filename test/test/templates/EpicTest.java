@@ -26,8 +26,8 @@ public class EpicTest {
         list.add(1);
         list.add(2);
         duration = 5;
-        startTime = LocalDateTime.now();
-        LocalDateTime endTime = LocalDateTime.now().plusMinutes(duration);
+        startTime = LocalDateTime.of(2024, 7, 2, 7, 0, 0);
+        LocalDateTime endTime = LocalDateTime.of(2024, 7, 2, 7, 5, 0);
         epic = new Epic("Эпик 1", "Описание Эпика 1", 1, TaskStatuses.NEW, list, duration, startTime, endTime);
     }
 
