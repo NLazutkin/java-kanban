@@ -190,7 +190,7 @@ public class Main {
         }
 
         System.out.println(" ");
-        System.out.println("Приоритеты после обновления Таска:");
+        System.out.println("Приоритеты после обновления Задачи 3:");
         for (Task task : taskManager.getPrioritizedTasks()) {
             System.out.println(task);
         }
