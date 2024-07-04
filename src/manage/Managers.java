@@ -4,7 +4,6 @@ import manage.HistoryManager.HistoryManager;
 import manage.HistoryManager.InMemoryHistoryManager;
 import manage.TaskManager.InMemoryTaskManager;
 import manage.TaskManager.FileBackedTaskManager;
-import manage.TaskManager.TaskManager;
 
 import java.io.File;
 
@@ -12,7 +11,7 @@ public final class Managers {
     private Managers() {
     }
 
-    public static TaskManager getDefault() {
+    public static InMemoryTaskManager getDefault() {
         return new InMemoryTaskManager();
     }
 
