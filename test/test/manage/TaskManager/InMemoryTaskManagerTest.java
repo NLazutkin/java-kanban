@@ -144,4 +144,16 @@ public class InMemoryTaskManagerTest {
         assertEquals(6, prioritizedList.size(), "Задача не добавлена в список отсортированных " +
                 "по приоритету задач!");
     }
+
+    @Test
+    void isEpicNotPrintInPrioritizedListWhenDeleteAllSubtasks() {
+        boolean isSubtask1Deleted = taskManager.deleteSubtask(subtask1.getId());
+        boolean isSubtask2Deleted = taskManager.deleteSubtask(subtask2.getId());
+
+        List<Task> prioritizedList = taskManager.getPrioritizedTasks();
+
+        assertEquals(2, prioritizedList.size(), "Некорректное количество элементов в списке");
+        assertEquals(task1, prioritizedList.getFirst(), "Ожидается Задача 1, но найден другой элемент списка");
+        assertEquals(task2, prioritizedList.getLast(), "Ожидается Задача 2, но найден другой элемент списка");
+    }
 }

@@ -138,7 +138,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task createTask(Task task) {
+    public Task createTask(Task task) throws RuntimeException {
         task.setId(idCounter += 1);
         if (isNotValid(task).isEmpty()) {
             taskList.put(task.getId(), task);
@@ -161,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask createSubtask(Subtask subtask) {
+    public Subtask createSubtask(Subtask subtask) throws RuntimeException {
         subtask.setId(idCounter += 1);
         if (isNotValid(subtask).isEmpty()) {
             subtaskList.put(subtask.getId(), subtask);
@@ -337,10 +337,8 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic updateEpic(Epic epic) {
         int id = epic.getId();
         if (epicList.containsKey(id)) {
-            if (epic.getStartTime() != null) {
-                prioritizedSet.remove(epicList.get(epic.getId()));
-                prioritizedSet.add(epic);
-            }
+            prioritizedSet.remove(epicList.get(epic.getId()));
+            prioritizedSet.add(epic);
             epicList.put(epic.getId(), epic);
             return epic;
         }
@@ -364,11 +362,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getSubtaskByEpicId(int epicId) {
-        return epicList.get(epicId).getSubtaskCodes().stream().filter(subtaskList::containsKey).map(subtaskList::get).toList();
+        if (!epicList.isEmpty() && epicList.containsKey(epicId)) {
+            return epicList.get(epicId).getSubtaskCodes().stream().filter(subtaskList::containsKey).map(subtaskList::get).toList();
+        }
+        return new ArrayList<>();
     }
 
     public List<Task> getPrioritizedTasks() {
-        return prioritizedSet.stream().filter(Objects::nonNull).toList();
+        return prioritizedSet.stream().filter(Objects::nonNull).filter(Task -> Task.getStartTime() != null).toList();
     }
 
     @Override

@@ -40,7 +40,7 @@ public class Subtask extends Task {
                 + ", description = '" + super.getDescription() + '\''
                 + ", id = " + super.getId()
                 + ", status = " + super.getStatus()
-                + ", duration = " + super.getDurationToMinutes()
+                + ", duration = " + super.getDurationToString()
                 + ", startTime = " + super.getStartTimeToString()
                 + ", endTime = " + super.getEndTimeToString()
                 + ", epicID = " + epicId
