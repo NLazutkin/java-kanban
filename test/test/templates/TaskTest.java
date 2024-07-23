@@ -45,8 +45,9 @@ public class TaskTest {
     }
 
     @Test
-    void checkGetStatus() {
-        assertEquals(TaskStatuses.NEW, task.getStatus(), "Ошибка чтения статуса Задачи");
+    void checkStatusGetterSetter() {
+        task.setStatus(TaskStatuses.DONE);
+        assertEquals(TaskStatuses.DONE, task.getStatus(), "Ошибка чтения статуса Задачи");
     }
 
     @Test
@@ -56,7 +57,8 @@ public class TaskTest {
 
     @Test
     void checkDuration() {
-        assertEquals(Duration.ofMinutes(duration), task.getDuration(), "Ошибка чтения продолжительности Задачи");
+        task.setDuration(Duration.ofMinutes(15));
+        assertEquals(Duration.ofMinutes(15), task.getDuration(), "Ошибка чтения продолжительности Задачи");
     }
 
     @Test
@@ -65,8 +67,16 @@ public class TaskTest {
     }
 
     @Test
-    void checkStartTime() {
-        assertEquals(startTime, task.getStartTime(), "Ошибка чтения времени начала Задачи");
+    void checkStartTimeGetterSetter() {
+        LocalDateTime checkTime = LocalDateTime.of(2024, 07, 21, 10, 0, 0);
+        task.setStartTime(checkTime);
+        assertEquals(checkTime, task.getStartTime(), "Ошибка чтения времени начала Задачи");
+    }
+
+    @Test
+    void checkStartTimeToString() {
+        assertEquals(startTime.plusMinutes(duration).format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")),
+                task.getEndTimeToString(), "Ошибка чтения времени окончания Задачи");
     }
 
     @Test
@@ -86,6 +96,10 @@ public class TaskTest {
                 "Ошибка расчета оставшегося времени на Задачу");
     }
 
+    @Test
+    void checkDurationToString() {
+        assertEquals(String.valueOf(Duration.ofMinutes(duration).toMinutes()), task.getDurationToString(), "Ошибка чтения продолжительности Задачи");
+    }
 
     @Test
     void checkToString() {

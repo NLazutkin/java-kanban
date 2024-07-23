@@ -10,8 +10,8 @@ import java.util.Objects;
 
 public class Task {
     private int id;
-    private final String title;
-    private final String description;
+    private String title;
+    private String description;
     private TaskStatuses status = TaskStatuses.NEW;
     private Duration duration = Duration.ZERO;
     private LocalDateTime startTime;
@@ -62,24 +62,52 @@ public class Task {
         return description;
     }
 
+    public void setStatus(TaskStatuses status) {
+        this.status = status;
+    }
+
     public TaskStatuses getStatus() {
         return status;
     }
 
-    public TaskTypes getType() {
-        return TaskTypes.TASK;
+    public void setDuration(Duration duration) {
+        this.duration = duration;
     }
 
     public Duration getDuration() {
+        if (duration == null) {
+            return Duration.ZERO;
+        }
+
         return duration;
     }
 
-    public long getDurationToMinutes() {
-        return duration.toMinutes();
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public LocalDateTime getStartTime() {
         return startTime;
+    }
+
+    public long getDurationToMinutes() {
+        if (duration == null) {
+            return Duration.ZERO.toMinutes();
+        }
+
+        return duration.toMinutes();
+    }
+
+    public String getDurationToString() {
+        if (duration == null) {
+            return "null";
+        }
+
+        return String.valueOf(duration.toMinutes());
+    }
+
+    public TaskTypes getType() {
+        return TaskTypes.TASK;
     }
 
     public String getStartTimeToString() {
@@ -90,7 +118,7 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plusMinutes(duration.toMinutes());
+        return startTime.plusMinutes(getDurationToMinutes());
     }
 
     public String getEndTimeToString() {
@@ -130,7 +158,7 @@ public class Task {
                 + ", description = '" + description + '\''
                 + ", id = " + id
                 + ", status = " + status
-                + ", duration = " + duration.toMinutes()
+                + ", duration = " + getDurationToString()
                 + ", startTime = " + getStartTimeToString()
                 + ", endTime = " + getEndTimeToString()
                 + '}';

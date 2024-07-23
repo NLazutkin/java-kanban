@@ -1,3 +1,4 @@
+import http.HttpTaskServer;
 import manage.Managers;
 import manage.TaskManager.TaskManager;
 import templates.Epic;
@@ -5,16 +6,20 @@ import templates.Subtask;
 import templates.Task;
 import enums.TaskStatuses;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         TaskManager taskManager = Managers.getDefault();
+        HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager);
         final String taskTitle = "Задача ";
         final String epicTitle = "Эпик ";
         final String subtaskTitle = "Подзадача ";
         final String subtask1Description = "Эпик 1";
         final String subtask2Description = "Эпик 2";
+
+        // httpTaskServer.start();
 
         Task task1 = taskManager.createTask(new Task(taskTitle + "1", taskTitle + "1", 10,
                 LocalDateTime.of(2024, 7, 2, 7, 0, 0)));
@@ -65,7 +70,7 @@ public class Main {
         subtask7 = taskManager.getSubtaskFromList(subtask7.getId());
         subtask8 = taskManager.getSubtaskFromList(subtask8.getId());
 
-        // show all
+        // show all/
         System.out.println(" ");
         System.out.println("Задачи:");
         for (Task task : taskManager.getTasks()) {
@@ -146,7 +151,6 @@ public class Main {
             System.out.println(task);
         }
 
-        boolean resultEpic1 = taskManager.deleteEpic(epic1.getId());
         boolean resultSubtask1 = taskManager.deleteSubtask(subtask1.getId());
         boolean resultSubtask2 = taskManager.deleteSubtask(subtask2.getId());
         boolean resultSubtask3 = taskManager.deleteSubtask(subtask3.getId());
@@ -165,7 +169,7 @@ public class Main {
         }
 
         System.out.println(" ");
-        System.out.println("Приоритеты после удаления Эпика и подзадачи:");
+        System.out.println("Приоритеты после удаления Подзадач Эпика 1:");
         for (Task task : taskManager.getPrioritizedTasks()) {
             System.out.println(task);
         }
@@ -175,7 +179,7 @@ public class Main {
                 task3.getId(),
                 TaskStatuses.IN_PROGRESS,
                 task3.getDurationToMinutes(),
-                task3.getStartTime()));
+                task3.getStartTime().minusMinutes(120)));
 
         System.out.println(" ");
         System.out.println("История польз. обновлена задача 3:");
@@ -216,7 +220,7 @@ public class Main {
                 TaskStatuses.IN_PROGRESS,
                 subtask5.getEpicId(),
                 subtask5.getDurationToMinutes(),
-                subtask5.getStartTime().plusMinutes(8)));
+                subtask5.getStartTime().plusMinutes(60)));
 
         System.out.println(" ");
         System.out.println("Приоритеты после обновления Подзадачи:");

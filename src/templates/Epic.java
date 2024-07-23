@@ -31,6 +31,10 @@ public class Epic extends Task {
         return subtaskCodes;
     }
 
+    public void setSubtaskCodes(List<Integer> subtaskCodes) {
+        this.subtaskCodes = subtaskCodes;
+    }
+
     public TaskTypes getType() {
         return TaskTypes.EPIC;
     }
@@ -60,8 +64,8 @@ public class Epic extends Task {
                 + ", description = '" + super.getDescription() + '\''
                 + ", id = " + super.getId()
                 + ", status = " + super.getStatus()
-                + ", duration = " + super.getDurationToMinutes()
-                + ", startTime = " + getStartTimeToString()
+                + ", duration = " + super.getDurationToString()
+                + ", startTime = " + super.getStartTimeToString()
                 + ", endTime = " + getEndTimeToString()
                 + ", subtaskCodes = " + subtaskCodes
                 + '}';

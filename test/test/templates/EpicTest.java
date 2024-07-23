@@ -68,6 +68,21 @@ public class EpicTest {
     }
 
     @Test
+    void checkSetSubtaskCodes() {
+        List<Integer> inputlist = new ArrayList<>();
+        inputlist.add(5);
+        inputlist.add(6);
+        inputlist.add(7);
+
+        epic.setSubtaskCodes(inputlist);
+
+        List<Integer> outpuList = epic.getSubtaskCodes();
+
+        assertEquals(inputlist.size(), outpuList.size(), "Ошибка записи списка подзадач Эпика");
+        assertEquals(inputlist.getLast(), outpuList.getLast(), "Ошибка записи списка подзадач Эпика");
+    }
+
+    @Test
     void checkGetSubtaskCodes() {
         assertNotNull(epic.getSubtaskCodes(), "Ошибка чтения списка подзадач Эпика");
     }
@@ -91,6 +106,13 @@ public class EpicTest {
     void checkEndTime() {
         assertEquals(startTime.plusMinutes(duration), epic.getEndTime(), "Ошибка чтения времени окончания Задачи");
     }
+
+    @Test
+    void checkEndTimeToString() {
+        assertEquals(startTime.plusMinutes(duration).format(DateTimeFormatter.ofPattern("HH:mm dd.MM.yy")),
+                epic.getEndTimeToString(), "Ошибка чтения времени окончания Задачи");
+    }
+
 
     @Test
     void checkSpentTime() {
